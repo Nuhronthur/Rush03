@@ -6,10 +6,15 @@
 /*   By: jonvella <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/12 17:47:26 by jonvella          #+#    #+#             */
-/*   Updated: 2022/02/12 18:01:46 by jonvella         ###   ########.fr       */
+/*   Updated: 2022/02/12 20:13:20 by jonvella         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+#include <stdio.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <unistd.h>
+void	rtu(char *str, int nb);
 int	ft_atoi(char *str)
 {
 	int	i;
@@ -36,4 +41,67 @@ int	ft_atoi(char *str)
 		r *= -1;
 	return (r);
 }
+int	ft_hmt(int nb)
+{
+	int	i;
 
+	i= 0;
+	while (nb > 0)
+	{
+		nb /= 10;
+		i++;
+	}
+	return (i);
+}
+int	ft_hmtri(int nb)
+{
+	int	i;
+
+	i = 0;
+	while (nb > 0)
+	{
+		nb -= 3;
+		i++;
+	}
+	return (i);
+}
+int	ft_rohff(int nb)
+{
+	int i;
+
+	i = 1;
+	while (nb > 0)
+	{
+		i *= 10;
+		nb--;
+	}
+	return (i);
+}
+void	rtn(char *str, int nb)
+	{
+		int cd;
+		int tr;
+		int t;
+
+		cd = ft_hmt(nb);	
+		tr = ft_hmtri(cd);
+		if (tr == 1)
+			printf("%i\n",nb);
+		else 
+		{
+			t = nb / (ft_rohff(cd - 1));
+			printf("%i\n", t);
+			rtn(str, nb - t * ft_rohff(cd - 1)); 
+		}
+		return ;
+	}
+int main(int ac, char **av)
+{
+	char res[691];
+	int	fd;
+	int r;
+
+	fd = open("numbers.dict.txt", O_RDONLY);
+	r = read(fd, res, 691);
+	rtn(res, ft_atoi(av[1]));
+}
